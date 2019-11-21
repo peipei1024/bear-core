@@ -1,4 +1,4 @@
-package com.xzpei.bear.core.retry;
+package com.bear.core.retry;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -19,7 +19,7 @@ public class RetryAspect {
 
     private Logger logger = LoggerFactory.getLogger(RetryAspect.class);
 
-    @Pointcut("@annotation(com.xzpei.bear.core.retry.Retryable)")
+    @Pointcut("@annotation(com.bear.core.retry.Retryable)")
     private void retryMethodCall(){}
 
     @Around("retryMethodCall()")

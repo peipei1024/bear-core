@@ -1,4 +1,4 @@
-package com.xzpei.bear.core.retry;
+package com.bear.core.retry;
 
 import java.lang.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.xzpei.bear.core;
+package com.bear.core.page;
 
 /**
  * @author shomop
