@@ -29,7 +29,7 @@ import java.net.*;
  * @author shomop
  * @date 2019/11/6 10:38
  * 参考：原文链接：https://blog.csdn.net/w372426096/article/details/82713315
- * https://my.oschina.net/wangjunBlog/blog/1889015
+ * 添加@EnableRetry注解启用失败重试功能
  */
 @Component
 public class AClient {
@@ -41,11 +41,11 @@ public class AClient {
     public void init(){
         defaultRequestConfig = RequestConfig.custom()
                 //一、连接目标服务器超时时间：ConnectionTimeout-->指的是连接一个url的连接等待时间
-                .setConnectTimeout(5000)
+                .setConnectTimeout(1000)
                 //三、从连接池获取连接的超时时间:ConnectionRequestTimeout
-                .setConnectionRequestTimeout(5000)
+                .setConnectionRequestTimeout(1000)
                 //二、读取目标服务器数据超时时间：SocketTimeout-->指的是连接上一个url，获取response的返回等待时间
-                .setSocketTimeout(30000)
+                .setSocketTimeout(1000 * 5)
                 .build();
 
     }
@@ -85,12 +85,24 @@ public class AClient {
         };
     }
 
+    @Retryable(value = RetryExhaustedException.class, maxAttempts = 3, backoff = @Backoff(delay = 500L))
+    public String doGet(String url, Proxy proxy){
+        return _doGet(url, proxy, null);
+    }
 
     @Retryable(value = RetryExhaustedException.class, maxAttempts = 3, backoff = @Backoff(delay = 500L))
-    public String _doGet(String url, Proxy proxy, String respCharset) {
+    public String doGet(String url){
+        return _doGet(url, null, null);
+    }
+
+    @Retryable(value = RetryExhaustedException.class, maxAttempts = 3, backoff = @Backoff(delay = 500L))
+    public String doGet(String url, Proxy proxy, String respCharset){
+        return _doGet(url, proxy, respCharset);
+    }
+
+    private String _doGet(String url, Proxy proxy, String respCharset) {
         String result = null;
         try {
-//            log.info("[Http-client] start {}", url);
             if (respCharset == null) {
                 respCharset = "utf-8";
             }
@@ -116,14 +128,14 @@ public class AClient {
             response.close();
         }catch (Exception e){
             log.info("[Http-client] fail {}, {}", url, e.getMessage());
-            throw new RetryExhaustedException(url, e);
+            throw new RetryExhaustedException(url + " retry fail", e);
         }
         return result;
     }
 
     @Recover
     public String recover(RetryExhaustedException e){
-        log.error("[Http-client] error", e);
+        log.error("[Http-client] error {}", e.getMessage());
         return null;
     }
 
