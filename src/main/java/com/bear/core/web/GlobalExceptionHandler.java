@@ -1,6 +1,5 @@
 package com.bear.core.web;
 
-import com.bear.core.exception.ServiceException;
 import com.bear.core.rest.CodeMsg;
 import com.bear.core.rest.Result;
 import org.apache.commons.lang3.exception.ExceptionUtils;

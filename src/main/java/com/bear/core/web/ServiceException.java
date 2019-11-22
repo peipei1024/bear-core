@@ -1,4 +1,4 @@
-package com.bear.core.exception;
+package com.bear.core.web;
 
 
 import com.bear.core.rest.CodeMsg;
