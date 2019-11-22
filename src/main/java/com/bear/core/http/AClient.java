@@ -29,6 +29,7 @@ import java.net.*;
  * @author shomop
  * @date 2019/11/6 10:38
  * 参考：原文链接：https://blog.csdn.net/w372426096/article/details/82713315
+ * https://www.jianshu.com/p/ba8dd2ce380a
  * 添加@EnableRetry注解启用失败重试功能
  */
 @Component
