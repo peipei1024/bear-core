@@ -53,6 +53,7 @@ public class AClient {
 
     private HttpRequestRetryHandler createRetryHandler() {
         return new HttpRequestRetryHandler() {
+            @Override
             public boolean retryRequest(IOException e, int i, HttpContext httpContext) {
                 if (i >= 3) {// 如果已经重试了2次，就放弃
                     return false;
